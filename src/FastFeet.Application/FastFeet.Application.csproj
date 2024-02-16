@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Users\" />
+    <None Remove="Users\CreateUserCommand\" />
+    <None Remove="Commons\" />
+    <None Remove="Commons\Command\" />
+    <None Remove="Commons\Response\" />
+    <None Remove="Extension\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Users\" />
+    <Folder Include="Users\CreateUserCommand\" />
+    <Folder Include="Commons\" />
+    <Folder Include="Commons\Command\" />
+    <Folder Include="Commons\Response\" />
+    <Folder Include="Extension\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FastFeet.Domain\FastFeet.Domain.csproj" />
+  </ItemGroup>
+</Project>
