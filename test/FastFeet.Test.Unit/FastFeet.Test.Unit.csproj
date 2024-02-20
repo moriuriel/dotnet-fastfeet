@@ -38,7 +38,6 @@
     <Folder Include="Commons\" />
     <Folder Include="Application\" />
     <Folder Include="Application\Users\" />
-    <Folder Include="Application\Users\CreateUserCommandTest\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FastFeet.Domain\FastFeet.Domain.csproj" />
