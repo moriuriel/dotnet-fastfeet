@@ -21,8 +21,7 @@ namespace FastFeet.Application.Users.CreateUserCommand
 
             RuleFor(_ => _.UserType)
 	            .IsInEnum()
-	            .NotEmpty()
-	            .When(_ => _.UserType == UserType.None);
+	            .NotEqual(UserType.None);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 using System.Net;
-using FastFeet.Application.Commons.Response;
 using FastFeet.Application.Users.CreateUserCommand;
 using FastFeet.Test.Unit.Commons;
 using FluentAssertions;
