@@ -10,6 +10,7 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
 {
     private readonly ICryptographyService _cryptographyService;
     private readonly IUserRepository _userRepository;
+
     public CreateUserCommandHandler(ICryptographyService cryptographyService, IUserRepository userRepository)
     {
         _cryptographyService = cryptographyService;
@@ -22,11 +23,11 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
             return ErrorResponse.UnprocessableEntity(request.Errors);
         
         var isValidEmail = await _userRepository.CheckHasEmail(request.Email);
-        if (isValidEmail)
+        if (!isValidEmail)
             return ErrorResponse.Conflict("Email already exists");
 
         var isValidTaxId = await _userRepository.CheckHasTaxId(request.TaxId);
-        if (isValidTaxId)
+        if (!isValidTaxId)
             return ErrorResponse.Conflict("TaxId already exists");
         
         var hasedPassword = _cryptographyService.ComputeSha256Hash(request.Password);
@@ -39,7 +40,8 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
             type: request.UserType);
 
         if(entity.IsFailure)
-            return ErrorResponse.UnprocessableEntity(entity.Errors.Select(errors => errors.Message).ToList());
+            return ErrorResponse.UnprocessableEntity(
+                entity.Errors.Select(errors => errors.Message).ToList());
         
         await _userRepository.Create(entity.Value);
         
