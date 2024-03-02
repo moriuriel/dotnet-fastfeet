@@ -10,7 +10,7 @@ public class CreateUserCommandBuilder : BuilderBase<CreateUserCommand>
     private string _name = FakerSingleton.GetInstance().Faker.Person.FullName;
     private string _email = FakerSingleton.GetInstance().Faker.Person.Email;
     private readonly string _password = FakerSingleton.GetInstance().Faker.Random.Word();
-    private readonly string _taxId = FakerSingleton.GetInstance().Faker.Person.Cpf();
+    private readonly string _taxId = FakerSingleton.GetInstance().Faker.Person.Cpf(includeFormatSymbols: false);
     private UserType _userType = UserType.Customer;
 
     public override CreateUserCommand Build()
