@@ -7,11 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\FastFeet.Application\FastFeet.Application.csproj" />
+      <ProjectReference Include="..\FastFeet.CrossCutting\FastFeet.CrossCutting.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
+      <ProjectReference Include="..\FastFeet.Infrastructure.ExternalService\FastFeet.Infrastructure.ExternalService.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
     </ItemGroup>
 
 </Project>
