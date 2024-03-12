@@ -17,27 +17,29 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
         _userRepository = userRepository;
     }
 
-    public async Task<Response> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        if (!request.IsValid())
-            return ErrorResponse.UnprocessableEntity(request.Errors);
-        
-        var isValidEmail = await _userRepository.CheckHasEmail(request.Email);
+        if (!command.IsValid())
+            return ErrorResponse.UnprocessableEntity(command.Errors);
+
+        var user = command.user;
+
+        var isValidEmail = await _userRepository.CheckHasEmail(user.Email);
         if (!isValidEmail)
             return ErrorResponse.Conflict("Email already exists");
 
-        var isValidTaxId = await _userRepository.CheckHasTaxId(request.TaxId);
+        var isValidTaxId = await _userRepository.CheckHasTaxId(user.TaxId);
         if (!isValidTaxId)
             return ErrorResponse.Conflict("TaxId already exists");
         
-        var hasedPassword = _cryptographyService.ComputeSha256Hash(request.Password);
+        var hasedPassword = _cryptographyService.ComputeSha256Hash(user.Password);
         
         var entity = User.Factory(
-            name: request.Name,
-            email: request.Email,
+            name: user.Name,
+            email: user.Email,
             password: hasedPassword,
-            taxId: request.TaxId,
-            type: request.UserType);
+            taxId: user.TaxId,
+            type: user.UserType);
 
         if(entity.IsFailure)
             return ErrorResponse.UnprocessableEntity(

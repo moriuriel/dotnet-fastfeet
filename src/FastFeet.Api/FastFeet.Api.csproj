@@ -8,6 +8,8 @@
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,6 +20,15 @@
       <ProjectReference Include="..\FastFeet.Infrastructure.ExternalService\FastFeet.Infrastructure.ExternalService.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
+      <ProjectReference Include="..\FastFeet.Infrastructure.Database\FastFeet.Infrastructure.Database.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Controllers\v1\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Controllers\v1\" />
+    </ItemGroup>
 </Project>
