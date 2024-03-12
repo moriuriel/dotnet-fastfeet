@@ -23,8 +23,10 @@ public sealed class CreateUserHandlerTest
 
         var handler = new CreateUserCommandHandler(_cryptographyService.Object, _userRepository.Object);
 
+        var user = new CreateUserRequestBuilder().WithEmail(email: FakerSingleton.GetInstance().Faker.Random.Word()).Build();
+
         var command = new CreateUserCommandBuilder()
-            .WithEmail(email: FakerSingleton.GetInstance().Faker.Random.Word())
+            .WithUser(user)
             .Build();
 
         //Act
@@ -37,7 +39,7 @@ public sealed class CreateUserHandlerTest
 
         _userRepository.Verify(_ => _.CheckHasTaxId(It.IsAny<string>()), times: Times.Never);
 
-        _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.Password), times: Times.Never);
+        _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.User.Password), times: Times.Never);
 
         _userRepository.Verify(_ => _.Create(It.IsAny<User>()), times: Times.Never);
     }
@@ -53,15 +55,15 @@ public sealed class CreateUserHandlerTest
         var command = new CreateUserCommandBuilder().Build();
 
         var hashedPassword = FakerSingleton.GetInstance().Faker.Internet.Password();
-        _cryptographyService.Setup(_ => _.ComputeSha256Hash(command.Password))
+        _cryptographyService.Setup(_ => _.ComputeSha256Hash(command.User.Password))
             .Returns(hashedPassword);
 
         var isValidEmail = true;
-        _userRepository.Setup(_ => _.CheckHasEmail(command.Email))
+        _userRepository.Setup(_ => _.CheckHasEmail(command.User.Email))
             .ReturnsAsync(isValidEmail);
 
         var isValidTaxId = true;
-        _userRepository.Setup(_ => _.CheckHasTaxId(command.TaxId))
+        _userRepository.Setup(_ => _.CheckHasTaxId(command.User.TaxId))
             .ReturnsAsync(isValidTaxId);
         //Act
         var result = await handler.Handle(command, cancellationToken);
@@ -70,7 +72,7 @@ public sealed class CreateUserHandlerTest
         result.HttpStatusCode.Should().Be(HttpStatusCode.Created);
         ((result as SuccessResponse)!).Id.Should().NotBeNull();
         
-        _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.Password), times: Times.Once);
+        _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.User.Password), times: Times.Once);
 
         _userRepository.Verify(_ => _.CheckHasEmail(It.IsAny<string>()), times: Times.Once);
 

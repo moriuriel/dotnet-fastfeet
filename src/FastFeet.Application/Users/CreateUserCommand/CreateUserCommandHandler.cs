@@ -22,7 +22,7 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
         if (!command.IsValid())
             return ErrorResponse.UnprocessableEntity(command.Errors);
 
-        var user = command.user;
+        var user = command.User;
 
         var isValidEmail = await _userRepository.CheckHasEmail(user.Email);
         if (!isValidEmail)
