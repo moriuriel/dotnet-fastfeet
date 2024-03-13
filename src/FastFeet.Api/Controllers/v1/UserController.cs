@@ -18,12 +18,12 @@ public class UserController : ControllerBase
 
     [HttpPost()]
     public async Task<IActionResult> PostAsync(
-        [FromHeader][Required] Guid IdempotencyKey,
+        [FromHeader][Required] Guid idempotencyKey,
         [FromBody] CreateUserRequest user,
         CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-          request: new CreateUserCommand(IdempotencyKey, user),
+          request: new CreateUserCommand(idempotencyKey, user),
           cancellationToken);
 
         return StatusCode((int)result.HttpStatusCode, result);
