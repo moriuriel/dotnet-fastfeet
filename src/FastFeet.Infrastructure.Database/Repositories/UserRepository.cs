@@ -8,10 +8,10 @@ namespace FastFeet.Infrastructure.Database.Repositories;
 [ExcludeFromCodeCoverage]
 internal sealed class UserRepository : IUserRepository
 {
-    //private readonly IDbConnection _dbConnection;
+    private readonly IDbConnection _dbConnection;
 
-    //public UserRepository(IDbConnection dbConnection)
-    //    => _dbConnection = dbConnection;
+    public UserRepository(IDbConnection dbConnection)
+        => _dbConnection = dbConnection;
 
     public Task<bool> CheckHasEmail(string email)
     {
@@ -28,5 +28,3 @@ internal sealed class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 }
-
-

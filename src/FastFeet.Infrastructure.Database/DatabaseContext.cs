@@ -13,10 +13,10 @@ public static class DatabaseContext
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        //var connectionString = configuration.GetConnectionString("PostgreFastFeet");
-        //ArgumentNullException.ThrowIfNull(nameof(connectionString));
+        var connectionString = configuration.GetConnectionString("PostgreFastFeet");
+        ArgumentNullException.ThrowIfNull(connectionString);
 
-        //services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionString));
+        services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connectionString));
         services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }

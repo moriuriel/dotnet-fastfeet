@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  fastfeet.api:
+    image: ${DOCKER_REGISTRY-}fastfeet
+    container_name: fastfeet.api
+    build:
+      context: .
+      dockerfile: src/FastFeet.Api/
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+  fastfeet.database:
+    image: postgres:lastest
+    container_name: fastfeet.database
+    environment:
+        - POSTGRES_DB=fastfeet
+        - POSTGRES_USER=dev
+        - POSTGRES_PASSWORD=dev
+    volumes:
+        - ./.container/fastfeet-db:/var/lib/postgresql/data
+    ports:
+        - 5432:5432

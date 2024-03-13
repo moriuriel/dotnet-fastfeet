@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFeet.CrossCutting", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFeet.Infrastructure.Database", "src\FastFeet.Infrastructure.Database\FastFeet.Infrastructure.Database.csproj", "{66E5F2F2-A764-4ADA-BAA6-9D409EAF6ED3}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AB0D1E60-7A27-47A4-9E4A-3876B850054B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{66E5F2F2-A764-4ADA-BAA6-9D409EAF6ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66E5F2F2-A764-4ADA-BAA6-9D409EAF6ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66E5F2F2-A764-4ADA-BAA6-9D409EAF6ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB0D1E60-7A27-47A4-9E4A-3876B850054B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB0D1E60-7A27-47A4-9E4A-3876B850054B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB0D1E60-7A27-47A4-9E4A-3876B850054B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB0D1E60-7A27-47A4-9E4A-3876B850054B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
