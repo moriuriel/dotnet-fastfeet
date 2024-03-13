@@ -6,12 +6,12 @@ services:
     container_name: fastfeet.api
     build:
       context: .
-      dockerfile: src/FastFeet.Api/
+      dockerfile: src/FastFeet.Api/Dockerfile
     ports:
-      - "5000:5000"
-      - "5001:5001"
+      - "3000:3000"
+      - "3001:3001"
   fastfeet.database:
-    image: postgres:lastest
+    image: postgres:latest
     container_name: fastfeet.database
     environment:
         - POSTGRES_DB=fastfeet
