@@ -8,8 +8,8 @@ services:
       context: .
       dockerfile: src/FastFeet.Api/Dockerfile
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "5002:5002"
+      - "5001:5001"
   fastfeet.database:
     image: postgres:latest
     container_name: fastfeet.database
