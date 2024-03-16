@@ -7,7 +7,7 @@ namespace FastFeet.Application.Users.CreateUserCommand;
 
 public sealed record CreateUserCommand(
     Guid IdempotencyKey,
-    CreateUserRequest User) : CommandBase, IRequest<Response>
+    CreateUserRequest User) : CommandBase, IRequest<ResponseBase>
 {
     public override bool IsValid()
     {

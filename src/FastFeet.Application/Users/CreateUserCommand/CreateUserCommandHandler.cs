@@ -6,7 +6,7 @@ using MediatR;
 
 namespace FastFeet.Application.Users.CreateUserCommand;
 
-public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response>
+public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ResponseBase>
 {
     private readonly ICryptographyService _cryptographyService;
     private readonly IUserRepository _userRepository;
@@ -17,7 +17,7 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
         _userRepository = userRepository;
     }
 
-    public async Task<Response> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ResponseBase> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
         if (!command.IsValid())
             return ErrorResponse.UnprocessableEntity(command.Errors);

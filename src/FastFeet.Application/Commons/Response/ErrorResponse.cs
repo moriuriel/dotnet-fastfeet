@@ -2,7 +2,7 @@
 
 namespace FastFeet.Application.Commons.Response;
 
-public class ErrorResponse : Response
+public class ErrorResponse : ResponseBase
 {
     private ErrorResponse(HttpStatusCode httpStatusCode, List<string> errors) : base(httpStatusCode)
         => Errors = errors;

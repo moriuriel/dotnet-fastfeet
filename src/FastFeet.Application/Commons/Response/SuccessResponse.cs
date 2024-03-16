@@ -2,7 +2,7 @@
 
 namespace FastFeet.Application.Commons.Response;
 
-public sealed class SuccessResponse : Response
+public sealed class SuccessResponse : ResponseBase
 {
     private SuccessResponse(HttpStatusCode statusCode) : base(statusCode) { }
 
