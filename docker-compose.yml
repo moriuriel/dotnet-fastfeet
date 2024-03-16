@@ -21,3 +21,11 @@ services:
         - ./.container/fastfeet-db:/var/lib/postgresql/data
     ports:
         - 5432:5432
+  fastfeet.seq:
+    image: datalust/seq:latest
+    container_name: fastfeet.seq
+    environment:
+        - ACCEPT_EULA=Y
+    ports:
+        - 5341:5341
+        - 8081:80
