@@ -1,3 +1,4 @@
+using FastFeet.Api;
 using FastFeet.Application;
 using FastFeet.CrossCutting.AppSettings;
 using FastFeet.Infrastructure.Database;
@@ -26,10 +27,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddCryptographyService();
 builder.Services.AddDatabaseContext(configuration);
+builder.Services.AddCustomHealthChecks();
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
-
+app.UseHealthChecks("/health");
 app.Run();
