@@ -12,6 +12,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,8 +30,10 @@
 
     <ItemGroup>
       <None Remove="Controllers\v1\" />
+      <None Remove="Middleware\" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Controllers\v1\" />
+      <Folder Include="Middleware\" />
     </ItemGroup>
 </Project>

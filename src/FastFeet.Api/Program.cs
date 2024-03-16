@@ -1,10 +1,15 @@
 using FastFeet.Api;
+using FastFeet.Api.Middleware;
 using FastFeet.Application;
 using FastFeet.CrossCutting.AppSettings;
 using FastFeet.Infrastructure.Database;
 using FastFeet.Infrastructure.ExternalService.Cryptography;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfiguration) =>
+loggerConfiguration.ReadFrom.Configuration(context.Configuration));
 
 var configuration = Configuration.GetConfiguration();
 builder.Services.AddSingleton(configuration);
@@ -31,6 +36,8 @@ builder.Services.AddCustomHealthChecks();
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLogContextMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();

@@ -11,16 +11,16 @@
     <None Remove="Users\CreateUserCommand\" />
     <None Remove="Commons\" />
     <None Remove="Commons\Command\" />
-    <None Remove="Commons\Response\" />
     <None Remove="Extension\" />
+    <None Remove="Commons\Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Users\" />
     <Folder Include="Users\CreateUserCommand\" />
     <Folder Include="Commons\" />
     <Folder Include="Commons\Command\" />
-    <Folder Include="Commons\Response\" />
     <Folder Include="Extension\" />
+    <Folder Include="Commons\Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
