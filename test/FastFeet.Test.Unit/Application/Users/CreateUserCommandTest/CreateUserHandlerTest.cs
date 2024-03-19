@@ -35,13 +35,13 @@ public sealed class CreateUserHandlerTest
         //Assert
         result.HttpStatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
 
-        _userRepository.Verify(_ => _.CheckHasEmail(It.IsAny<string>()), times: Times.Never);
+        _userRepository.Verify(_ => _.CheckExistsEmailAsync(It.IsAny<string>(), cancellationToken), times: Times.Never);
 
-        _userRepository.Verify(_ => _.CheckHasTaxId(It.IsAny<string>()), times: Times.Never);
+        _userRepository.Verify(_ => _.CheckExistsTaxIdAsync(It.IsAny<string>(), cancellationToken), times: Times.Never);
 
         _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.User.Password), times: Times.Never);
 
-        _userRepository.Verify(_ => _.Create(It.IsAny<User>()), times: Times.Never);
+        _userRepository.Verify(_ => _.SaveAsync(It.IsAny<User>(), cancellationToken), times: Times.Never);
     }
 
     [Fact]
@@ -59,11 +59,11 @@ public sealed class CreateUserHandlerTest
             .Returns(hashedPassword);
 
         var isValidEmail = true;
-        _userRepository.Setup(_ => _.CheckHasEmail(command.User.Email))
+        _userRepository.Setup(_ => _.CheckExistsEmailAsync(command.User.Email, cancellationToken))
             .ReturnsAsync(isValidEmail);
 
         var isValidTaxId = true;
-        _userRepository.Setup(_ => _.CheckHasTaxId(command.User.TaxId))
+        _userRepository.Setup(_ => _.CheckExistsTaxIdAsync(command.User.TaxId, cancellationToken))
             .ReturnsAsync(isValidTaxId);
         //Act
         var result = await handler.Handle(command, cancellationToken);
@@ -74,10 +74,10 @@ public sealed class CreateUserHandlerTest
         
         _cryptographyService.Verify(_ => _.ComputeSha256Hash(command.User.Password), times: Times.Once);
 
-        _userRepository.Verify(_ => _.CheckHasEmail(It.IsAny<string>()), times: Times.Once);
+        _userRepository.Verify(_ => _.CheckExistsEmailAsync(It.IsAny<string>(),cancellationToken), times: Times.Once);
 
-        _userRepository.Verify(_ => _.CheckHasTaxId(It.IsAny<string>()), times: Times.Once);
+        _userRepository.Verify(_ => _.CheckExistsTaxIdAsync(It.IsAny<string>(), cancellationToken), times: Times.Once);
 
-        _userRepository.Verify(_ => _.Create(It.IsAny<User>()), times: Times.Once);
+        _userRepository.Verify(_ => _.SaveAsync(It.IsAny<User>(),cancellationToken), times: Times.Once);
     }
 }

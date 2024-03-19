@@ -4,7 +4,7 @@ namespace FastFeet.Domain.Interfaces.Repository;
 
 public interface IUserRepository
 {
-    Task<bool> CheckHasEmail(string email);
-    Task<bool> CheckHasTaxId(string taxId);
-    Task<bool> Create(User user);
+    Task<bool> CheckExistsEmailAsync(string email, CancellationToken cancellationToken);
+    Task<bool> CheckExistsTaxIdAsync(string taxId, CancellationToken cancellationToken);
+    Task<bool> SaveAsync(User user, CancellationToken cancellationToken);
 }

@@ -24,16 +24,16 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
 
         var user = command.User;
 
-        var isValidEmail = await _userRepository.CheckHasEmail(user.Email);
+        var isValidEmail = await _userRepository.CheckExistsEmailAsync(user.Email, cancellationToken);
         if (!isValidEmail)
             return ErrorResponse.Conflict("Email already exists");
 
-        var isValidTaxId = await _userRepository.CheckHasTaxId(user.TaxId);
+        var isValidTaxId = await _userRepository.CheckExistsTaxIdAsync(user.TaxId, cancellationToken);
         if (!isValidTaxId)
             return ErrorResponse.Conflict("TaxId already exists");
-        
+
         var hasedPassword = _cryptographyService.ComputeSha256Hash(user.Password);
-        
+
         var entity = User.Factory(
             name: user.Name,
             email: user.Email,
@@ -41,12 +41,12 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
             taxId: user.TaxId,
             type: user.UserType);
 
-        if(entity.IsFailure)
+        if (entity.IsFailure)
             return ErrorResponse.UnprocessableEntity(
                 entity.Errors.Select(errors => errors.Message).ToList());
-        
-        await _userRepository.Create(entity.Value);
-        
+
+        await _userRepository.SaveAsync(entity.Value, cancellationToken);
+
         return SuccessResponse.Created(entity.Value.Id);
     }
 }
