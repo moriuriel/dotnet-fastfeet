@@ -17,7 +17,7 @@ internal sealed class UserRepository : IUserRepository
 
     public async Task<bool> CheckExistsEmailAsync(string email, CancellationToken cancellationToken)
     {
-        var filter = "email = @email";
+        var filter = " email = @email";
 
         var sqlRaw = new StringBuilder(ExistsEmailPartialCommand).Append(filter).ToString();
 
@@ -33,7 +33,7 @@ internal sealed class UserRepository : IUserRepository
 
     public async Task<bool> CheckExistsTaxIdAsync(string taxId, CancellationToken cancellationToken)
     {
-        var filter = "email = @taxId";
+        var filter = " tax_id = @taxId";
 
         var sqlRaw = new StringBuilder(ExistsEmailPartialCommand).Append(filter).ToString();
 
@@ -47,13 +47,33 @@ internal sealed class UserRepository : IUserRepository
         return total > 0;
     }
 
-    public Task<bool> SaveAsync(User user, CancellationToken cancellationToken)
+    public async Task<bool> SaveAsync(User user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var command = new CommandDefinition(
+            commandText: InsertCommand,
+            parameters: new {
+                id = user.Id,
+                email = user.Email,
+                password = user.Password,
+                tax_id = user.TaxId,
+                user_type = user.Type,
+                created_at = user.CreatedAt,
+            },
+            cancellationToken: cancellationToken);
+
+        var rowsAffected = await _dbConnection.ExecuteAsync(command);
+
+        return rowsAffected > 0;
     }
 
     #region [Private Methods]
     private static string ExistsEmailPartialCommand
-        => "SELECT COUNT(*) AS TOTAL WHERE";
+        => "SELECT COUNT(*) AS TOTAL FROM public.users WHERE";
+
+    private static string InsertCommand
+        => @"INSERT INTO public.users
+                (id, email, password, tax_id, user_type, created_at)
+             VALUES
+                (@id, @email, @password, @tax_id, @user_type, @created_at)";
     #endregion
 }

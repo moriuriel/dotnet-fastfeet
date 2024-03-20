@@ -24,12 +24,12 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
 
         var user = command.User;
 
-        var isValidEmail = await _userRepository.CheckExistsEmailAsync(user.Email, cancellationToken);
-        if (!isValidEmail)
+        var existsEmail = await _userRepository.CheckExistsEmailAsync(user.Email, cancellationToken);
+        if (existsEmail)
             return ErrorResponse.Conflict("Email already exists");
 
-        var isValidTaxId = await _userRepository.CheckExistsTaxIdAsync(user.TaxId, cancellationToken);
-        if (!isValidTaxId)
+        var existsTaxId = await _userRepository.CheckExistsTaxIdAsync(user.TaxId, cancellationToken);
+        if (existsTaxId)
             return ErrorResponse.Conflict("TaxId already exists");
 
         var hasedPassword = _cryptographyService.ComputeSha256Hash(user.Password);
