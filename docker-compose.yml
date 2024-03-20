@@ -11,7 +11,7 @@ services:
       - "5002:5002"
       - "5001:5001"
   fastfeet.database:
-    image: postgres:latest
+    image: postgres:15-alpine
     container_name: fastfeet.database
     environment:
         - POSTGRES_DB=fastfeet
