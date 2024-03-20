@@ -13,6 +13,7 @@
     <None Remove="Commons\Command\" />
     <None Remove="Extension\" />
     <None Remove="Commons\Behaviors\" />
+    <None Remove="Users\GetUserById\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Users\" />
@@ -21,6 +22,7 @@
     <Folder Include="Commons\Command\" />
     <Folder Include="Extension\" />
     <Folder Include="Commons\Behaviors\" />
+    <Folder Include="Users\GetUserById\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />

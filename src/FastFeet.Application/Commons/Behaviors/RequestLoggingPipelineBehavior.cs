@@ -29,7 +29,8 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
         if (response.IsSuccessStatusCode())
         {
             _logger.LogInformation("Completed request {RequestName}", requestName);
-        } else
+        }
+        else
         {
             using (LogContext.PushProperty("Error", (response as ErrorResponse)!.Errors, true))
             {

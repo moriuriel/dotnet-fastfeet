@@ -9,12 +9,9 @@ public static class ApplicationDependency
 {
     public static IServiceCollection AddCustomMediatr(this IServiceCollection services)
     {
-        services.AddMediatR(config =>
-        {
-            config.RegisterServicesFromAssemblies(assemblies: Assembly.GetExecutingAssembly());
-            config.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
-        });
-
+        services.AddMediatR(_ => _.RegisterServicesFromAssemblies(assemblies: Assembly.GetExecutingAssembly()));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestLoggingPipelineBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
         return services;
     }
 }

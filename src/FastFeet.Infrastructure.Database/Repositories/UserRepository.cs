@@ -66,6 +66,11 @@ internal sealed class UserRepository : IUserRepository
         return rowsAffected > 0;
     }
 
+    public Task<User> FindByIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     #region [Private Methods]
     private static string ExistsEmailPartialCommand
         => "SELECT COUNT(*) AS TOTAL FROM public.users WHERE";
