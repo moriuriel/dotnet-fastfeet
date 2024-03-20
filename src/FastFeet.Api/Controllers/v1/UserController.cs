@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using FastFeet.Application.Commons.Response;
 using FastFeet.Application.Users.CreateUserCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,7 @@ public class UserController : ControllerBase
     public UserController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost()]
+    [ProducesResponseType(type: typeof(SuccessResponse), statusCode: (int)HttpStatusCode.Created)]
     public async Task<IActionResult> PostAsync(
         [FromHeader][Required] Guid idempotencyKey,
         [FromBody] CreateUserRequest user,

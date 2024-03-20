@@ -33,10 +33,13 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddCryptographyService();
 builder.Services.AddDatabaseContext(configuration);
 builder.Services.AddCustomHealthChecks();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 
 app.UseMiddleware<RequestLogContextMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 app.UseSerilogRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
