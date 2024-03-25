@@ -6,13 +6,13 @@ namespace FastFeet.Application.Users.GetUserById;
 
 public sealed class GetUserByIdResponse : ResponseBase
 {
-    public User? User { get; }
+    public UserResponse? User { get; }
 
-    public GetUserByIdResponse(HttpStatusCode httpStatusCode, User? user) : base(httpStatusCode)
+    public GetUserByIdResponse(HttpStatusCode httpStatusCode, UserResponse? user) : base(httpStatusCode)
         => User = user;
 
     public static GetUserByIdResponse Ok(User user)
-        => new(HttpStatusCode.OK, user);
+        => new(HttpStatusCode.OK, new(user.Id, user.Name, user.Active, user.UserType, user.CreatedAt));
 
     public static GetUserByIdResponse NoContent()
         => new(HttpStatusCode.OK, null);

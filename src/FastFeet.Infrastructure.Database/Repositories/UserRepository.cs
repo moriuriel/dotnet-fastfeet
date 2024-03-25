@@ -33,7 +33,7 @@ internal sealed class UserRepository : IUserRepository
 
     public async Task<bool> CheckExistsTaxIdAsync(string taxId, CancellationToken cancellationToken)
     {
-        var filter = " tax_id = @taxId";
+        var filter = " taxId = @taxId";
 
         var sqlRaw = new StringBuilder(ExistsEmailPartialCommand).Append(filter).ToString();
 
@@ -49,15 +49,18 @@ internal sealed class UserRepository : IUserRepository
 
     public async Task<bool> SaveAsync(User user, CancellationToken cancellationToken)
     {
+        var snapshot = user.ToUserSnapshot();
         var command = new CommandDefinition(
             commandText: InsertCommand,
-            parameters: new {
-                id = user.Id,
-                email = user.Email,
-                password = user.Password,
-                tax_id = user.TaxId,
-                user_type = user.Type,
-                created_at = user.CreatedAt,
+            parameters: new
+            {
+                id = snapshot.Id,
+                name = snapshot.Name,
+                email = snapshot.Email,
+                password = snapshot.Password,
+                taxId = snapshot.TaxId,
+                userType = snapshot.UserType,
+                createdAt = snapshot.CreatedAt,
             },
             cancellationToken: cancellationToken);
 
@@ -66,19 +69,36 @@ internal sealed class UserRepository : IUserRepository
         return rowsAffected > 0;
     }
 
-    public Task<User> FindByIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<User?> FindByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var command = new CommandDefinition(
+            commandText: FindByIdCommnad,
+            parameters: new
+            {
+                id = userId.ToString()
+            },
+            cancellationToken: cancellationToken);
+
+        var user = await _dbConnection.QueryFirstOrDefaultAsync<UserSnapshot>(command);
+
+        if (user is null)
+            return null;
+
+        return User.FromSnapshot(user);
     }
 
     #region [Private Methods]
+
+    private static string FindByIdCommnad
+        => "SELECT * FROM public.users WHERE id = @id";
+
     private static string ExistsEmailPartialCommand
         => "SELECT COUNT(*) AS TOTAL FROM public.users WHERE";
 
     private static string InsertCommand
         => @"INSERT INTO public.users
-                (id, email, password, tax_id, user_type, created_at)
+                (id, name, email, password, taxId, userType, createdAt)
              VALUES
-                (@id, @email, @password, @tax_id, @user_type, @created_at)";
+                (@id, @name, @email, @password, @taxId, @userType, @createdAt)";
     #endregion
 }

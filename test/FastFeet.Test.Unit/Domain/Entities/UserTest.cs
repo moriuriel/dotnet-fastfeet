@@ -1,6 +1,7 @@
 ﻿using Bogus.Extensions.Brazil;
 using FastFeet.Domain.Entities;
 using FastFeet.Domain.Enums;
+using FastFeet.Domain.ValueObjects;
 using FastFeet.Test.Unit.Commons;
 using FluentAssertions;
 
@@ -14,18 +15,18 @@ public class UserTest
         //Arrange
         Guid id = Guid.NewGuid();
         string name = FakerSingleton.GetInstance().Faker.Person.FirstName;
-        string email = FakerSingleton.GetInstance().Faker.Person.Email; 
+        var email = Email.Create(FakerSingleton.GetInstance().Faker.Person.Email);
         string password = FakerSingleton.GetInstance().Faker.Internet.Password();
         string taxId = FakerSingleton.GetInstance().Faker.Person.Cpf();
-        UserType type = FakerSingleton.GetInstance().Faker.Random.Enum<UserType>();
+        UserType userType = FakerSingleton.GetInstance().Faker.Random.Enum<UserType>();
 
         //Act
         var user = User.Factory(
             name,
-            email,
+            email: email.Value,
             password,
             taxId,
-            type,
+            userType,
             id: id);
 
         //Assert
@@ -39,7 +40,7 @@ public class UserTest
         //Arrange
         Guid id = Guid.NewGuid();
         string name = string.Empty;
-        string email = FakerSingleton.GetInstance().Faker.Person.Email;
+        var email = Email.Create(FakerSingleton.GetInstance().Faker.Person.Email);
         string password = FakerSingleton.GetInstance().Faker.Internet.Password();
         string taxId = FakerSingleton.GetInstance().Faker.Person.Cpf();
         UserType type = FakerSingleton.GetInstance().Faker.Random.Enum<UserType>();
@@ -47,7 +48,7 @@ public class UserTest
         //Act
         var user = User.Factory(
             name,
-            email,
+            email: email.Value,
             password,
             taxId,
             type,
@@ -66,7 +67,7 @@ public class UserTest
         //Arrange
         Guid id = Guid.NewGuid();
         string name = FakerSingleton.GetInstance().Faker.Person.FirstName;
-        string email = FakerSingleton.GetInstance().Faker.Person.Email;
+        var email = Email.Create(FakerSingleton.GetInstance().Faker.Person.Email);
         string password = FakerSingleton.GetInstance().Faker.Internet.Password();
         string taxId = FakerSingleton.GetInstance().Faker.Person.Cpf();
         UserType type = userType;
@@ -74,7 +75,7 @@ public class UserTest
         //Act
         var user = User.Factory(
             name,
-            email,
+            email: email.Value,
             password,
             taxId,
             type,
@@ -92,14 +93,14 @@ public class UserTest
         //Arrange
         Guid id = Guid.NewGuid();
         string name = FakerSingleton.GetInstance().Faker.Person.FirstName;
-        string email = FakerSingleton.GetInstance().Faker.Person.Email;
+        var email = Email.Create(FakerSingleton.GetInstance().Faker.Person.Email);
         string password = FakerSingleton.GetInstance().Faker.Internet.Password();
         string taxId = FakerSingleton.GetInstance().Faker.Person.Cpf();
         UserType type = FakerSingleton.GetInstance().Faker.Random.Enum<UserType>();
 
         var user = User.Factory(
             name,
-            email,
+            email: email.Value,
             password,
             taxId,
             type,

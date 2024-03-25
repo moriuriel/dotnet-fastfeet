@@ -2,19 +2,23 @@
 using FastFeet.Domain.Commons;
 using FluentValidation;
 using FluentValidation.Results;
+using FastFeet.Domain.ValueObjects;
 
 namespace FastFeet.Domain.Entities;
 
 public sealed class User : AggregateRoot, IValidationDomain
 {
-    public User(
+    private User()
+    { }
+
+    private User(
         Guid? id,
         string name,
-        string email,
+        Email email,
         string password,
         string taxId,
         bool active,
-        UserType type,
+        UserType userType,
         DateTime createdAt) : base(id: id ?? Guid.NewGuid())
     {
         Name = name;
@@ -22,16 +26,16 @@ public sealed class User : AggregateRoot, IValidationDomain
         Password = password;
         TaxId = taxId;
         Active = active;
-        Type = type;
+        UserType = userType;
         CreatedAt = createdAt;
     }
 
     public static Result<User> Factory(
         string name,
-        string email,
+        Email email,
         string password,
         string taxId,
-        UserType type,
+        UserType userType,
         bool active = true,
         Guid? id = null)
     {
@@ -42,7 +46,7 @@ public sealed class User : AggregateRoot, IValidationDomain
             password,
             taxId,
             active,
-            type,
+            userType,
             createdAt: DateTime.Now);
 
         var validationResult = entity.GetValidationResult();
@@ -54,11 +58,11 @@ public sealed class User : AggregateRoot, IValidationDomain
     }
 
     public string Name { get; private set; }
-    public string Email { get; private set; }
+    public Email Email { get; private set; }
     public string Password { get; private set; }
     public string TaxId { get; private set; }
     public bool Active { get; private set; }
-    public UserType Type { get; private set; }
+    public UserType UserType { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
@@ -66,7 +70,7 @@ public sealed class User : AggregateRoot, IValidationDomain
         => new UserValidator().Validate(this);
 
     public bool IsDeliveryMan()
-        => Type == UserType.Deliveryman;
+        => UserType == UserType.Deliveryman;
 
     public bool IsActive()
         => Active;
@@ -76,8 +80,39 @@ public sealed class User : AggregateRoot, IValidationDomain
         Active = active;
         UpdatedAt = DateTime.Now;
     }
-}
 
+    public UserSnapshot ToUserSnapshot()
+    {
+        return new UserSnapshot
+        {
+            Id = Id.ToString(),
+            Email = Email.Value,
+            Name = Name,
+            Password = Password,
+            CreatedAt = CreatedAt,
+            TaxId = TaxId,
+            Active = Active,
+            UserType = UserType,
+            UpdatedAt = UpdatedAt
+        };
+    }
+
+    public static User FromSnapshot(UserSnapshot userSnapshot)
+    {
+        return new User
+        {
+            Id = Guid.Parse(userSnapshot.Id),
+            Name = userSnapshot.Name,
+            Email = Email.Create(userSnapshot.Email).Value,
+            Password = userSnapshot.Password,
+            TaxId = userSnapshot.TaxId,
+            Active = userSnapshot.Active,
+            UserType = userSnapshot.UserType,
+            CreatedAt = userSnapshot.CreatedAt,
+            UpdatedAt = userSnapshot.UpdatedAt,
+        };
+    }
+}
 internal sealed class UserValidator : AbstractValidator<User>
 {
     public UserValidator()
@@ -85,7 +120,7 @@ internal sealed class UserValidator : AbstractValidator<User>
         RuleFor(_ => _.Id)
             .NotEmpty();
 
-        RuleFor(_ => _.Type)
+        RuleFor(_ => _.UserType)
             .IsInEnum();
 
         RuleFor(_ => _.Name)
@@ -94,9 +129,6 @@ internal sealed class UserValidator : AbstractValidator<User>
 
         RuleFor(_ => _.Active)
             .NotEmpty();
-
-        RuleFor(_ => _.Email)
-            .EmailAddress();
 
         RuleFor(_ => _.TaxId)
             .NotEmpty();

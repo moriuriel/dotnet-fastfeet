@@ -1,6 +1,7 @@
 ﻿using FastFeet.Application.Commons.Response;
 using FastFeet.Domain.Entities;
 using FastFeet.Domain.Interfaces.Repository;
+using FastFeet.Domain.ValueObjects;
 using FastFeet.Infrastructure.ExternalService.Cryptography;
 using MediatR;
 
@@ -29,15 +30,19 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
         if (existsTaxId)
             return ErrorResponse.Conflict("TaxId already exists");
 
+        var email = Email.Create(user.Email);
+        if (email.IsFailure)
+            return ErrorResponse.UnprocessableEntity(
+                email.Errors.Select(errors => errors.Message).ToList());
+
         var hasedPassword = _cryptographyService.ComputeSha256Hash(user.Password);
 
         var entity = User.Factory(
             name: user.Name,
-            email: user.Email,
+            email: email.Value,
             password: hasedPassword,
             taxId: user.TaxId,
-            type: user.UserType);
-
+            userType: user.UserType);
         if (entity.IsFailure)
             return ErrorResponse.UnprocessableEntity(
                 entity.Errors.Select(errors => errors.Message).ToList());

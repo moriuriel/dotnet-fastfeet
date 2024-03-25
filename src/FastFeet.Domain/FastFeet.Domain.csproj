@@ -10,11 +10,13 @@
     <None Remove="Commons\" />
     <None Remove="Entities\" />
     <None Remove="Enums\" />
+    <None Remove="ValueObjects\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commons\" />
     <Folder Include="Entities\" />
     <Folder Include="Enums\" />
+    <Folder Include="ValueObjects\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.0" />
