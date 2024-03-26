@@ -33,6 +33,7 @@
     <None Remove="Application\Users\" />
     <None Remove="Application\Users\CreateUserCommandTest\" />
     <None Remove="Application\Users\GetUserByIdTest\" />
+    <None Remove="Commons\Builders\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -41,6 +42,7 @@
     <Folder Include="Application\" />
     <Folder Include="Application\Users\" />
     <Folder Include="Application\Users\GetUserByIdTest\" />
+    <Folder Include="Commons\Builders\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FastFeet.Domain\FastFeet.Domain.csproj" />

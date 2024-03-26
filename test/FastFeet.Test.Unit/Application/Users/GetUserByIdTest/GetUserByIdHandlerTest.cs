@@ -2,6 +2,7 @@
 using FastFeet.Application.Users.GetUserById;
 using FastFeet.Domain.Entities;
 using FastFeet.Domain.Interfaces.Repository;
+using FastFeet.Test.Unit.Commons.Builders;
 using FluentAssertions;
 using Moq;
 
@@ -41,12 +42,39 @@ public class GetUserByIdHandlerTest
         var handler = new GetUserByIdHandler(_userRepository.Object);
 
         var query = new GetUserByIdQueryBuilder().Build();
-    
+
         //Act
         var result = await handler.Handle(query, cancellationToken);
 
         //Arrange
         result.HttpStatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        _userRepository.Verify(
+            _ => _.FindByIdAsync(query.UserId, cancellationToken),
+            times: Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteMethodHandle_WithValidValues_ShouldReturnOk()
+    {
+        //Arrange
+        var cancellationToken = CancellationToken.None;
+
+        var user = new UserBuilder().Build();
+
+        var handler = new GetUserByIdHandler(_userRepository.Object);
+
+        var query = new GetUserByIdQueryBuilder().Build();
+        _userRepository.Setup(
+           _ => _.FindByIdAsync(query.UserId, cancellationToken))
+            .ReturnsAsync(user);
+
+        //Act
+        var result = await handler.Handle(query, cancellationToken);
+
+        //Arrange
+        result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+        (result as GetUserByIdResponse)!.User.Should().NotBeNull();
 
         _userRepository.Verify(
             _ => _.FindByIdAsync(query.UserId, cancellationToken),
