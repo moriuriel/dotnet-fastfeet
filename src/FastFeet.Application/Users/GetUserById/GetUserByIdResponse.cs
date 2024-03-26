@@ -15,5 +15,5 @@ public sealed class GetUserByIdResponse : ResponseBase
         => new(HttpStatusCode.OK, new(user.Id, user.Name, user.Active, user.UserType, user.CreatedAt));
 
     public static GetUserByIdResponse NoContent()
-        => new(HttpStatusCode.OK, null);
+        => new(HttpStatusCode.NoContent, null);
 }

@@ -11,9 +11,12 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, ResponseBase
     public GetUserByIdHandler(IUserRepository userRepository)
         => _userRepository = userRepository;
 
-    public async Task<ResponseBase> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ResponseBase> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.FindByIdAsync(request.UserId, cancellationToken);
+        if (!query.IsValid())
+            return ErrorResponse.UnprocessableEntity(query.Errors);
+
+        var user = await _userRepository.FindByIdAsync(query.UserId, cancellationToken);
 
         if (user is null)
             return GetUserByIdResponse.NoContent();

@@ -1,16 +1,13 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace FastFeet.Application.Users.GetUserById
+namespace FastFeet.Application.Users.GetUserById;
+
+public class GetUserByIdValidator : AbstractValidator<GetUserByIdQuery>
 {
-    public class GetUserByIdValidator : AbstractValidator<GetUserByIdQuery>
+    public GetUserByIdValidator()
     {
-        public GetUserByIdValidator()
-        {
-            RuleFor(_ => _.UserId)
-                .NotEmpty()
-                .Must(userId => Guid.TryParse(userId.ToString(), out var newGuid));
-        }
+        RuleFor(_ => _.UserId)
+            .NotEmpty()
+            .Must(userId => Guid.TryParse(userId.ToString(), out var newGuid));
     }
 }
-

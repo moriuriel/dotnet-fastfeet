@@ -20,8 +20,11 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
 
     public async Task<ResponseBase> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = command.User;
+        if (!command.IsValid())
+            return ErrorResponse.UnprocessableEntity(command.Errors);
 
+        var user = command.User;
+        
         var existsEmail = await _userRepository.CheckExistsEmailAsync(user.Email, cancellationToken);
         if (existsEmail)
             return ErrorResponse.Conflict("Email already exists");
