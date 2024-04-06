@@ -1,4 +1,4 @@
-﻿using FastFeet.Application.Commons.Command;
+﻿using FastFeet.Application.Abstractions.Idempotency;
 using FastFeet.Application.Commons.Response;
 using FluentValidation;
 using MediatR;
@@ -7,7 +7,7 @@ namespace FastFeet.Application.Users.CreateUserCommand;
 
 public sealed record CreateUserCommand(
     Guid IdempotencyKey,
-    CreateUserRequest User) : CommandBase, IRequest<ResponseBase>
+    CreateUserRequest User): IdempotentCommand(IdempotencyKey), IRequest<ResponseBase>
 {
     public override bool IsValid()
     {

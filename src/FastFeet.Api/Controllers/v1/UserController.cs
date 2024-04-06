@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     [HttpPost()]
     [ProducesResponseType(type: typeof(SuccessResponse), statusCode: (int)HttpStatusCode.Created)]
     public async Task<IActionResult> PostAsync(
-        [FromHeader][Required] Guid idempotencyKey,
+        [FromHeader(Name = "X-Idempotency-Key")][Required] Guid idempotencyKey,
         [FromBody] CreateUserRequest user,
         CancellationToken cancellationToken)
     {
