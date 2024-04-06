@@ -61,7 +61,7 @@ public class Delivery : Entity, IValidationDomain
     }
 
     internal void ToAccept(User deliveryMan)
-    {
+    { 
         DeliveryMan = deliveryMan;
         ModifiedOnUtc = DateTime.UtcNow;
         Status = DeliveryStatus.Accepted;

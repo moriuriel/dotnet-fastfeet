@@ -4,38 +4,42 @@ using FluentValidation.Results;
 
 namespace FastFeet.Domain.ValueObjects;
 
-public class ShippingAddress : IValidationDomain
+public sealed class ShippingAddress : IValidationDomain
 {
     private ShippingAddress(
-        long number,
+        string number,
         string reference,
         string city,
         string neighborhood,
         string state,
-        string postalCode)
+        string zipCode,
+        string street)
     {
         Number = number;
         Reference = reference;
         City = city;
         Neighborhood = neighborhood;
         State = state;
-        PostalCode = postalCode;
+        ZipCode = zipCode;
+        Street = street;
     }
 
-    public long Number { get; }
+    public string Number { get; }
     public string Reference { get; }
     public string City { get; }
     public string Neighborhood { get; }
     public string State { get; }
-    public string PostalCode { get; }
+    public string ZipCode { get; }
+    public string Street { get; }
 
     public static Result<ShippingAddress> Create(
-        long number,
+        string number,
         string reference,
         string city,
         string neighborhood,
         string state,
-        string postalCode)
+        string zipCode,
+        string street)
     {
         var valueObject = new ShippingAddress(
             number,
@@ -43,7 +47,8 @@ public class ShippingAddress : IValidationDomain
             city,
             neighborhood,
             state,
-            postalCode);
+            zipCode,
+            street);
 
         var validationResult = valueObject.GetValidationResult();
 
@@ -62,14 +67,16 @@ internal sealed class ShippingAddressValidator : AbstractValidator<ShippingAddre
     public ShippingAddressValidator()
     {
         RuleFor(_ => _.Number)
-            .NotNull();
+            .NotEmpty();
         RuleFor(_ => _.Neighborhood)
             .NotEmpty();
         RuleFor(_ => _.City)
             .NotEmpty();
-        RuleFor(_ => _.PostalCode)
+        RuleFor(_ => _.ZipCode)
             .NotEmpty();
         RuleFor(_ => _.State)
+            .NotEmpty();
+        RuleFor(_ => _.Street)
             .NotEmpty();
         RuleFor(_ => _.Reference)
             .NotEmpty()
