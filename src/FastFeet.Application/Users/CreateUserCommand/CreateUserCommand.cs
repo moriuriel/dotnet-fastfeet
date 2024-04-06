@@ -1,4 +1,4 @@
-﻿using FastFeet.Application.Abstractions.Idempotency;
+﻿using FastFeet.Application.Commons.Command;
 using FastFeet.Application.Commons.Response;
 using FluentValidation;
 using MediatR;

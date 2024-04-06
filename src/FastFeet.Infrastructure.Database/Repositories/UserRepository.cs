@@ -4,6 +4,7 @@ using System.Text;
 using Dapper;
 using FastFeet.Domain.Entities;
 using FastFeet.Domain.Interfaces.Repository;
+using FastFeet.Infrastructure.Database.Snapshots;
 
 namespace FastFeet.Infrastructure.Database.Repositories;
 
@@ -49,14 +50,15 @@ internal sealed class UserRepository : IUserRepository
 
     public async Task<bool> SaveAsync(User user, CancellationToken cancellationToken)
     {
-        var snapshot = user.ToUserSnapshot();
+        var snapshot = UserSnapshot.ToSnapshot(user);
+
         var command = new CommandDefinition(
             commandText: InsertCommand,
             parameters: new
             {
                 id = snapshot.Id,
                 name = snapshot.Name,
-                email = snapshot.Email,
+                email = snapshot.UserEmail,
                 password = snapshot.Password,
                 taxId = snapshot.TaxId,
                 userType = snapshot.UserType,
@@ -84,7 +86,7 @@ internal sealed class UserRepository : IUserRepository
         if (user is null)
             return null;
 
-        return User.FromSnapshot(user);
+        return user.FromUser();
     }
 
     #region [Private Methods]

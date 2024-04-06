@@ -16,9 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Repositories\" />
+    <None Remove="Snapshots\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
+    <Folder Include="Snapshots\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FastFeet.Domain\FastFeet.Domain.csproj" />

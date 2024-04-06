@@ -5,26 +5,22 @@ using FluentValidation;
 using FluentValidation.Results;
 
 namespace FastFeet.Domain.Entities;
-public class Delivery : AggregateRoot, IValidationDomain
+public class Delivery : Entity, IValidationDomain
 {
     private Delivery(
         ShippingAddress shippingAddress,
-        Guid customerId,
         Guid? id = null) : base(id: id ?? Guid.NewGuid())
     {
         ShippingAddress = shippingAddress;
-        CustomerId = customerId;
-        CreatedAtUtc = DateTime.UtcNow;
-        Status = DeliveryStatus.Available;
+        CreatedOnUtc = DateTime.UtcNow;
+        Status = DeliveryStatus.NotAvailable;
     }
 
     public ShippingAddress ShippingAddress { get; }
 
-    public Guid CustomerId { get; }
+    public User DeliveryMan { get; private set; } = default!;
 
-    public Guid DeliveryManId { get; private set; }
-
-    public DateTime CreatedAtUtc { get; }
+    public DateTime CreatedOnUtc { get; }
 
     public DateTime? ModifiedOnUtc { get; private set; }
 
@@ -33,14 +29,12 @@ public class Delivery : AggregateRoot, IValidationDomain
     public bool IsDeliveryAvailable
         => Status == DeliveryStatus.Available;
 
-    public Result<Delivery> Factory(
+    public static Result<Delivery> Factory(
         ShippingAddress shippingAddress,
-        Guid customerId,
         Guid? id = null)
     {
         var entity = new Delivery(
             shippingAddress,
-            customerId,
             id);
 
         var validationResult = entity.GetValidationResult();
@@ -54,20 +48,26 @@ public class Delivery : AggregateRoot, IValidationDomain
     public ValidationResult GetValidationResult()
         => new DeliveryValidator().Validate(this);
 
-    public void Accept(Guid deliveryManId)
+    internal void ToAvailable()
     {
-        DeliveryManId = deliveryManId;
+        ModifiedOnUtc = DateTime.UtcNow;
+        Status = DeliveryStatus.Available;
+    }
+
+    internal void ToCancelled()
+    {
+        ModifiedOnUtc = DateTime.UtcNow;
+        Status = DeliveryStatus.Cancelled;
+    }
+
+    internal void ToAccept(User deliveryMan)
+    {
+        DeliveryMan = deliveryMan;
         ModifiedOnUtc = DateTime.UtcNow;
         Status = DeliveryStatus.Accepted;
     }
 
-    public void Cancel()
-    {
-        ModifiedOnUtc = DateTime.UtcNow;
-        Status = DeliveryStatus.Canceled;
-    }
-
-    public void Complete()
+    internal void ToCompleted()
     {
         ModifiedOnUtc = DateTime.UtcNow;
         Status = DeliveryStatus.Completed;
@@ -78,8 +78,6 @@ internal sealed class DeliveryValidator : AbstractValidator<Delivery>
 {
     public DeliveryValidator()
     {
-        RuleFor(_ => _.CustomerId)
-            .NotNull();
         RuleFor(_ => _.ShippingAddress)
             .NotNull();
         RuleFor(_ => _.Id)

@@ -3,12 +3,13 @@
 namespace FastFeet.Domain.Enums;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum DeliveryStatus
+public enum OrderStatus
 {
     None,
-    NotAvailable,
-    Available,
-    Accepted,
-    Completed,
+    ToDo,
+    Doing,
+    Delivery,
+    Complete,
+    Ready,
     Cancelled,
 }

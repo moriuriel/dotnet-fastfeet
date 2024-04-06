@@ -8,9 +8,6 @@ namespace FastFeet.Domain.Entities;
 
 public sealed class User : AggregateRoot, IValidationDomain
 {
-    private User()
-    { }
-
     private User(
         Guid? id,
         string name,
@@ -79,38 +76,6 @@ public sealed class User : AggregateRoot, IValidationDomain
     {
         Active = active;
         UpdatedAt = DateTime.Now;
-    }
-
-    public UserSnapshot ToUserSnapshot()
-    {
-        return new UserSnapshot
-        {
-            Id = Id.ToString(),
-            Email = Email.Value,
-            Name = Name,
-            Password = Password,
-            CreatedAt = CreatedAt,
-            TaxId = TaxId,
-            Active = Active,
-            UserType = UserType,
-            UpdatedAt = UpdatedAt
-        };
-    }
-
-    public static User FromSnapshot(UserSnapshot userSnapshot)
-    {
-        return new User
-        {
-            Id = Guid.Parse(userSnapshot.Id),
-            Name = userSnapshot.Name,
-            Email = Email.Create(userSnapshot.Email).Value,
-            Password = userSnapshot.Password,
-            TaxId = userSnapshot.TaxId,
-            Active = userSnapshot.Active,
-            UserType = userSnapshot.UserType,
-            CreatedAt = userSnapshot.CreatedAt,
-            UpdatedAt = userSnapshot.UpdatedAt,
-        };
     }
 }
 internal sealed class UserValidator : AbstractValidator<User>
